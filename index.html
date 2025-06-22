@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I Love You Sweetheart</title>
+  <style>
+    body {
+      margin: 0;
+      background: white;
+      overflow: hidden;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    #sorryBtn {
+      padding: 20px 40px;
+      font-size: 28px;
+      background-color: pink;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      text-shadow: 0 0 10px white;
+      box-shadow: 0 0 15px pink;
+      animation: glow 2s infinite alternate;
+      cursor: pointer;
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px pink;
+      }
+      to {
+        box-shadow: 0 0 25px hotpink;
+      }
+    }
+
+    #caption {
+      margin-top: 10px;
+      font-size: 18px;
+      color: gray;
+    }
+
+    #readyBtn {
+      display: none;
+      margin-top: 20px;
+      background: transparent;
+      border: none;
+      font-size: 40px;
+      animation: pulse 2s infinite;
+      position: relative;
+    }
+
+    #readyBtn::before {
+      content: "🎁";
+      font-size: 60px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .star {
+      position: absolute;
+      font-size: 24px;
+      color: gold;
+      animation: twinkle 1s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .image-container {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      height: 290px;
+    }
+
+    .image-container img {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .love-message {
+      position: absolute;
+      top: 30px;
+      width: 100%;
+      text-align: center;
+      font-size: 24px;
+      color: red;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-shadow: 0 0 8px hotpink;
+    }
+
+    .firecracker {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: url('https://media.giphy.com/media/3o7TKxohg5cLs1d6u4/giphy.gif') center/cover no-repeat;
+      pointer-events: none;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 24px;
+      animation: float 6s infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(1); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+    }
+
+    .curve-text span {
+      display: inline-block;
+      position: absolute;
+      transform-origin: bottom center;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="center" id="start">
+  <button id="sorryBtn">Sorry</button>
+  <div id="caption">Tap on Sorry</div>
+</div>
+
+<div class="center">
+  <button id="readyBtn"></button>
+</div>
+
+<div class="image-container" id="heartContainer"></div>
+
+<div class="love-message curve-text" id="loveMessage"></div>
+
+<audio id="bgMusic" src="https://files.catbox.moe/pjmxo8.mp3"></audio>
+<audio id="boomSound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
+
+<script>
+  const sorryBtn = document.getElementById("sorryBtn");
+  const readyBtn = document.getElementById("readyBtn");
+  const startDiv = document.getElementById("start");
+  const heartContainer = document.getElementById("heartContainer");
+  const bgMusic = document.getElementById("bgMusic");
+  const boomSound = document.getElementById("boomSound");
+  const loveMessage = document.getElementById("loveMessage");
+
+  const imageUrls = [
+    "https://i.ibb.co/ZvsszqY/74022-DD7-8-A77-499-B-AD48-B434418-A07-DF.png",
+    "https://i.ibb.co/mr8Ts3bj/IMG-3713.jpg",
+    "https://i.ibb.co/212dc58G/IMG-3682.jpg",
+    "https://i.ibb.co/JFnRgvhn/IMG-2265.jpg",
+    "https://i.ibb.co/6RxyqmsJ/IMG-2259.jpg",
+    "https://i.ibb.co/N286QdRW/IMG-1840.jpg",
+    "https://i.ibb.co/6JqB9yNG/IMG-1167.jpg",
+    "https://i.ibb.co/sp4DqPVw/061a4f7e-769b-4a75-9093-cf1f3b7dfc33.jpg",
+    "https://i.ibb.co/fYdXsGmc/3d7ad99c-f7b5-4f91-ab90-059b6d784041.jpg",
+    "https://i.ibb.co/WNkmFts1/IMG-8588.jpg",
+    "https://i.ibb.co/PG42RPLX/IMG-8587.jpg",
+    "https://i.ibb.co/Ng6mBp3Q/3-FAA830-C-C295-4319-BEAA-A0-FEB5-BF62-AC.jpg",
+    "https://i.ibb.co/JWgtvPLJ/939b3a43-cfeb-4486-a9b0-dc0daca955eb.jpg",
+    "https://i.ibb.co/qYyk5Cgd/IMG-4088.jpg",
+    "https://i.ibb.co/Kpm8Lf4x/IMG-4085.jpg",
+    "https://i.ibb.co/nNRG3vCc/IMG-2256.jpg",
+    "https://i.ibb.co/chs0BxfP/IMG-2263.jpg",
+    "https://i.ibb.co/dYgJZqF/IMG-1109.jpg",
+    "https://i.ibb.co/xq4WJQvD/3293e8ec-0ace-4f9b-a5b8-198f2957542e.jpg",
+    "https://i.ibb.co/BKjPRcdc/95648506-2903-4483-8b76-ee72e99a6cf3.jpg"
+  ];
+
+  const heartPositions = [
+    [0, -90], [-40, -60], [40, -60],
+    [-60, -30], [60, -30], [-80, 10], [80, 10],
+    [-60, 50], [60, 50], [-40, 80], [40, 80],
+    [-20, 100], [20, 100], [0, 120],
+    [-10, 140], [10, 140],
+    [-5, 160], [5, 160],
+    [-2, 180], [2, 180]
+  ];
+
+  sorryBtn.onclick = () => {
+    sorryBtn.style.display = 'none';
+    document.getElementById("caption").style.display = 'none';
+    readyBtn.style.display = 'block';
+    for (let i = 0; i < 10; i++) {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.innerText = "✨";
+      star.style.left = `${50 + Math.random() * 30}%`;
+      star.style.top = `${40 + Math.random() * 10}%`;
+      readyBtn.appendChild(star);
+    }
+  };
+
+  readyBtn.onclick = () => {
+    readyBtn.style.display = 'none';
+    heartContainer.style.display = 'block';
+    bgMusic.play();
+    dropEmojis();
+    showImagesSequentially();
+    showLoveMessage("I love you sweetheart forever");
+  };
+
+  function showImagesSequentially() {
+    imageUrls.forEach((src, i) => {
+      const img = document.createElement("img");
+      img.src = src;
+      const [x, y] = heartPositions[i];
+      img.style.left = `${160 + x}px`;
+      img.style.top = `${140 + y}px`;
+      heartContainer.appendChild(img);
+      setTimeout(() => {
+        img.style.opacity = 1;
+        createFirecracker(x, y);
+        boomSound.play();
+      }, i * 500);
+    });
+  }
+
+  function createFirecracker(x, y) {
+    const fire = document.createElement("div");
+    fire.className = "firecracker";
+    fire.style.left = `${160 + x}px`;
+    fire.style.top = `${140 + y}px`;
+    heartContainer.appendChild(fire);
+    setTimeout(() => heartContainer.removeChild(fire), 1000);
+  }
+
+  function showLoveMessage(text) {
+    [...text].forEach((char, i) => {
+      const span = document.createElement("span");
+      span.innerText = char;
+      setTimeout(() => {
+        span.style.transform = `rotate(${i * 8 - text.length * 4}deg)`;
+        span.style.left = `calc(50% + ${i * 14 - text.length * 7}px)`;
+        span.style.bottom = `0px`;
+        loveMessage.appendChild(span);
+      }, i * 300);
+    });
+  }
+
+  function dropEmojis() {
+    for (let i = 0; i < 50; i++) {
+      const emoji = document.createElement("div");
+      emoji.className = "emoji";
+      emoji.innerText = "💖";
+      emoji.style.left = `${Math.random() * 100}vw`;
+      emoji.style.top = `${Math.random() * 100}vh`;
+      document.body.appendChild(emoji);
+    }
+  }
+</script>
+
+</body>
+</html>
